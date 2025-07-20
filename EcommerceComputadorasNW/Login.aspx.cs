@@ -35,9 +35,21 @@ namespace EcommerceComputadorasNW
 
                 if (count == 1)
                 {
-                    MostrarToast("¡Inicio de sesión exitoso!", "success");
+                    // Obtener el ID del usuario
+                    string idQuery = "SELECT UsuID FROM Usuarios WHERE CorUsu = @correo";
+                    SqlCommand idCmd = new SqlCommand(idQuery, connection);
+                    idCmd.Parameters.AddWithValue("@correo", correo);
+                    object idResult = idCmd.ExecuteScalar();
+
+                    if (idResult != null)
+                    {
+                        int userId = Convert.ToInt32(idResult);
+                        Session["UserID"] = userId;  // Guardar UserID en sesión
+                    }
+
                     Session["usuario"] = correo;
 
+                    MostrarToast("¡Inicio de sesión exitoso!", "success");
                     string script = "setTimeout(function(){ window.location = 'Default.aspx'; }, 2000);";
                     ClientScript.RegisterStartupScript(this.GetType(), "redirect", script, true);
                 }
