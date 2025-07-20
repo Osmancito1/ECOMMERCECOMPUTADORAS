@@ -1,4 +1,4 @@
-﻿// Checkout Page JavaScript
+﻿/*// Checkout Page JavaScript
 
 // DOM Elements
 const checkoutForm = document.getElementById("checkoutForm")
@@ -452,7 +452,7 @@ function showNotification(message, type = "success") {
         }
     }, 4000)
 }
-
+*/
 // Close modal when clicking outside
 window.addEventListener("click", (e) => {
     if (e.target === savedAddressesModal) {
