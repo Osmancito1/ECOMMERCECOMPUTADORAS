@@ -60,17 +60,13 @@ namespace EcommerceComputadorasNW
                 }
                 catch (Exception ex)
                 {
-                    MostrarError("Error al cargar datos del usuario: " + ex.Message);
+                   
                     Debug.WriteLine($"Error en CargarDatosUsuario: {ex}");
                 }
             }
         }
 
-        private void MostrarError(string v)
-        {
-            lblError.Visible = true;
-            //lblError.Text = mensaje;
-        }
+       
 
         private void CargarResumenPedido()
         {
@@ -87,7 +83,7 @@ namespace EcommerceComputadorasNW
                     int usuID = ObtenerUsuarioID(connection, correoUsuario);
                     if (usuID == 0)
                     {
-                        MostrarError("Usuario no encontrado");
+                       
                         Debug.WriteLine("Usuario no encontrado");
                         return;
                     }
@@ -97,7 +93,7 @@ namespace EcommerceComputadorasNW
                     // Verificar si hay productos en cualquier carrito
                     if (!ExistenProductosEnCarritos(connection, usuID))
                     {
-                        MostrarError("No tienes productos en tu carrito");
+                       
                         Debug.WriteLine("No se encontraron productos en ningún carrito");
                         return;
                     }
@@ -105,7 +101,7 @@ namespace EcommerceComputadorasNW
                     int carID = ObtenerCarritoConProductos(connection, usuID);
                     if (carID == 0)
                     {
-                        MostrarError("No tienes productos en tu carrito");
+                        
                         return;
                     }
 
@@ -114,7 +110,7 @@ namespace EcommerceComputadorasNW
                     DataTable dtProductos = ObtenerProductosCarrito(connection, carID);
                     if (dtProductos.Rows.Count == 0)
                     {
-                        MostrarError("Tu carrito está vacío");
+                        
                         return;
                     }
 
@@ -123,7 +119,7 @@ namespace EcommerceComputadorasNW
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"ERROR: {ex}");
-                    MostrarError("Error al cargar el carrito. Por favor intenta nuevamente.");
+                    
                 }
             }
         }
@@ -337,7 +333,7 @@ namespace EcommerceComputadorasNW
                 {
                     // EN CASO DE ERROR, REVERTIR TODO
                     trans.Rollback();
-                    MostrarError("Ocurrió un error al procesar tu pedido: " + ex.Message);
+                   
                     Debug.WriteLine("Error en btnContinuar_Click: " + ex.ToString());
                 }
             }

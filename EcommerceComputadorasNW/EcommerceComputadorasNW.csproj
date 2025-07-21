@@ -164,6 +164,7 @@
     <Content Include="bin\WebGrease.dll" />
     <Content Include="Carrito.aspx" />
     <Content Include="Confirmacion.aspx" />
+    <Content Include="Content\Confirmacion.css" />
     <Content Include="Content\pago.css" />
     <Content Include="Content\pedidos.css" />
     <Content Include="obj\Debug\EcommerceComputadorasNW.csproj.FileListAbsolute.txt" />

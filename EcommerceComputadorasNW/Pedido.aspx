@@ -23,7 +23,7 @@
                             <span>TechStore</span>
                         </a>
                     </div>
-                    
+
                     <div class="checkout-progress">
                         <div class="progress-step active">
                             <div class="step-number">1</div>
@@ -69,7 +69,7 @@
                                     <i class="fas fa-user"></i>
                                     <h3>Información de Contacto</h3>
                                 </div>
-                                
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="txtFirstName">Nombre *</label>
@@ -110,39 +110,41 @@
                                     <div class="input-focus-effect"></div>
                                 </div>
 
-                               <asp:UpdatePanel ID="UpdatePanelDireccion" runat="server">
-    <ContentTemplate>
-        <div class="form-row">
+                                <asp:UpdatePanel ID="UpdatePanelDireccion" runat="server">
+                                    <ContentTemplate>
+                                        <div class="form-row">
 
-            <div class="form-group">
-                <label for="ddlCity">Ciudad *</label>
-                <asp:DropDownList ID="ddlCity" runat="server" CssClass="form-control" required>
-                </asp:DropDownList>
-                <div class="input-focus-effect"></div>
-            </div>
+                                            <div class="form-group">
+                                                <label for="ddlState">Departamento *</label>
+                                                <asp:DropDownList ID="ddlState" runat="server" CssClass="form-control" required
+                                                    AutoPostBack="true" OnSelectedIndexChanged="ddlState_SelectedIndexChanged">
+                                                </asp:DropDownList>
+                                                <div class="input-focus-effect"></div>
+                                            </div>
 
-            <div class="form-group">
-                <label for="ddlState">Departamento *</label>
-                <asp:DropDownList ID="ddlState" runat="server" CssClass="form-control" required 
-                    AutoPostBack="true" OnSelectedIndexChanged="ddlState_SelectedIndexChanged">
-                </asp:DropDownList>
-                <div class="input-focus-effect"></div>
-            </div>
+                                            <div class="form-group">
+                                                <label for="ddlCity">Ciudad *</label>
+                                                <asp:DropDownList ID="ddlCity" runat="server" CssClass="form-control" required>
+                                                </asp:DropDownList>
+                                                <div class="input-focus-effect"></div>
+                                            </div>
 
-            <div class="form-group">
-                <label for="txtZipCode">Código Postal *</label>
-                <asp:TextBox ID="txtZipCode" runat="server" CssClass="form-control" required></asp:TextBox>
-                <div class="input-focus-effect"></div>
-            </div>
-        </div>
-    </ContentTemplate>
-</asp:UpdatePanel>
 
-                               
+
+                                            <div class="form-group">
+                                                <label for="txtZipCode">Código Postal *</label>
+                                                <asp:TextBox ID="txtZipCode" runat="server" CssClass="form-control" required></asp:TextBox>
+                                                <div class="input-focus-effect"></div>
+                                            </div>
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+
+
                             </div>
 
-                           
-                            <asp:Label ID="lblError" runat="server" Text="Label"></asp:Label>
+
+
                             <!-- Form Actions -->
                             <div class="form-actions">
                                 <asp:Button ID="btnVolver" runat="server" CssClass="btn-secondary" Text="Volver al Carrito" OnClick="btnVolver_Click" />
@@ -150,70 +152,74 @@
                             </div>
                         </div>
                     </div>
-                     <!-- Order Summary -->
- <div class="order-summary-section">
-     <div class="order-summary">
-         <h3>Resumen del Pedido</h3>
+                    <!-- Order Summary -->
+                    <div class="order-summary-section">
+                        <div class="order-summary">
+                            <h3>Resumen del Pedido</h3>
 
-         <div class="order-items">
-             <asp:Repeater ID="rptProductos" runat="server">
-                 <ItemTemplate>
-                     <div class="order-item">
-                         <div class="item-info">
-                             <h4><%# Eval("NomPro") %></h4>
-                             <div class="item-details">
-                                 <span><%# Eval("CantPro") %> x <%# Eval("PrecUni", "{0:C}") %></span>
-                                 <span class="item-subtotal"><%# Eval("Subtotal", "{0:C}") %></span>
-                             </div>
-                         </div>
-                     </div>
-                 </ItemTemplate>
-             </asp:Repeater>
-         </div>
+                            <div class="order-items">
+                                <asp:Repeater ID="rptProductos" runat="server">
+                                    <ItemTemplate>
+                                        <div class="order-item">
+                                            <div class="item-info">
+                                                <h4><%# Eval("NomPro") %></h4>
+                                                <div class="item-details">
+                                                    <span><%# Eval("CantPro") %> x <%# Eval("PrecUni", "{0:C}") %></span>
+                                                    <span class="item-subtotal"><%# Eval("Subtotal", "{0:C}") %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
 
-         <div class="order-totals">
-             <div class="total-row">
-                 <span>Subtotal</span>
-                 <span class="total-value"><asp:Literal ID="lblSubtotal" runat="server" Text="$0.00" /></span>
-             </div>
-             <div class="total-row">
-                 <span>Envío</span>
-                 <span class="total-value"><asp:Literal ID="lblEnvio" runat="server" Text="$0.00" /></span>
-             </div>
-             <div class="total-row">
-                 <span>Impuestos</span>
-                 <span class="total-value"><asp:Literal ID="lblImpuestos" runat="server" Text="$0.00" /></span>
-             </div>
-             <div class="total-row grand-total">
-                 <span>Total</span>
-                 <span class="total-value"><asp:Literal ID="lblTotal" runat="server" Text="$0.00" /></span>
-             </div>
-         </div>
+                            <div class="order-totals">
+                                <div class="total-row">
+                                    <span>Subtotal</span>
+                                    <span class="total-value">
+                                        <asp:Literal ID="lblSubtotal" runat="server" Text="$0.00" /></span>
+                                </div>
+                                <div class="total-row">
+                                    <span>Envío</span>
+                                    <span class="total-value">
+                                        <asp:Literal ID="lblEnvio" runat="server" Text="$0.00" /></span>
+                                </div>
+                                <div class="total-row">
+                                    <span>Impuestos</span>
+                                    <span class="total-value">
+                                        <asp:Literal ID="lblImpuestos" runat="server" Text="$0.00" /></span>
+                                </div>
+                                <div class="total-row grand-total">
+                                    <span>Total</span>
+                                    <span class="total-value">
+                                        <asp:Literal ID="lblTotal" runat="server" Text="$0.00" /></span>
+                                </div>
+                            </div>
 
-         <div class="promo-code">
-             <div class="promo-input">
-                 <asp:TextBox ID="txtPromoCode" runat="server" CssClass="promo-textbox" placeholder="Código de descuento"></asp:TextBox>
-                 <asp:Button ID="btnAplicarPromo" runat="server" CssClass="promo-button" Text="Aplicar" OnClick="btnAplicarPromo_Click" />
-             </div>
-             <asp:Label ID="lblMensajePromo" runat="server" CssClass="promo-message" Visible="false"></asp:Label>
-         </div>
+                            <div class="promo-code">
+                                <div class="promo-input">
+                                    <asp:TextBox ID="txtPromoCode" runat="server" CssClass="promo-textbox" placeholder="Código de descuento"></asp:TextBox>
+                                    <asp:Button ID="btnAplicarPromo" runat="server" CssClass="promo-button" Text="Aplicar" OnClick="btnAplicarPromo_Click" />
+                                </div>
+                                <asp:Label ID="lblMensajePromo" runat="server" CssClass="promo-message" Visible="false"></asp:Label>
+                            </div>
 
-         <div class="security-badges">
-             <div class="security-badge">
-                 <i class="fas fa-shield-alt"></i>
-                 <span>Compra Segura</span>
-             </div>
-             <div class="security-badge">
-                 <i class="fas fa-truck"></i>
-                 <span>Envío Garantizado</span>
-             </div>
-             <div class="security-badge">
-                 <i class="fas fa-undo"></i>
-                 <span>30 días de devolución</span>
-             </div>
-         </div>
-     </div>
- </div>
+                            <div class="security-badges">
+                                <div class="security-badge">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Compra Segura</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Envío Garantizado</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-undo"></i>
+                                    <span>30 días de devolución</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
