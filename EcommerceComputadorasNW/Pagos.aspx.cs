@@ -13,20 +13,177 @@ namespace EcommerceComputadorasNW
 {
     public partial class Pagos : System.Web.UI.Page
     {
+        private string connectionString = ConfigurationManager.ConnectionStrings["conexionDB"].ConnectionString;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                // Validamos que exista un PedID en la sesión
-                if (Session["PedID"] == null)
+                if (Session["PedID"] == null || Session["usuario"] == null)
                 {
-                    // Si no hay ID de pedido, redirigimos al inicio o al carrito
                     Response.Redirect("Default.aspx");
                     return;
                 }
 
                 int pedID = Convert.ToInt32(Session["PedID"]);
+                string correoUsuario = Session["usuario"].ToString();
+
                 CargarResumenPedido(pedID);
+                CargarDireccionFacturacion(pedID);
+                CargarTarjetasGuardadas(correoUsuario);
+            }
+        }
+        private void CargarDireccionFacturacion(int pedID)
+        {
+            string direccion = "";
+            string query = "SELECT DirFact FROM Pedidos WHERE PedID = @PedID";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@PedID", pedID);
+                    con.Open();
+                    object result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        direccion = result.ToString().Replace(", ", "<br>");
+                    }
+                }
+            }
+            ltlDireccionFacturacion.Text = $"<p>{direccion}</p>";
+        }
+
+        private void CargarTarjetasGuardadas(string correo)
+        {
+            int usuID = ObtenerUsuarioID(correo);
+            if (usuID == 0) return;
+
+            DataTable dtTarjetas = new DataTable();
+            string query = "SELECT TarjetaID, TipoTarjeta, NombreTitular, UltimosCuatro, FechaExp FROM Tarjetas WHERE UsuID = @UsuID";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@UsuID", usuID);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dtTarjetas);
+                }
+            }
+            rptTarjetasGuardadas.DataSource = dtTarjetas;
+            rptTarjetasGuardadas.DataBind();
+        }
+
+        protected void btnProcesarPago_Click(object sender, EventArgs e)
+        {
+            int pedID = Convert.ToInt32(Session["PedID"]);
+            decimal montoTotal = decimal.Parse(lblTotalPago.Text, System.Globalization.NumberStyles.Currency);
+
+            // Simulación de pago
+            bool pagoExitoso = true; // En un caso real, aquí se llamaría a la pasarela de pago
+
+            if (pagoExitoso)
+            {
+                // Si se usó una nueva tarjeta y se marcó para guardar
+                string opcionTarjeta = Request.Form["savedCard"];
+                if (opcionTarjeta == "new" && chkSaveCard.Checked)
+                {
+                    GuardarTarjeta();
+                }
+
+                RegistrarPago(pedID, montoTotal, "Tarjeta");
+                ActualizarEstadoPedido(pedID, "Pagado");
+
+                // Limpiar sesiones y redirigir a confirmación
+                Session.Remove("PedID");
+                Session.Remove("Carrito"); // Limpiar carrito de la sesión
+                Response.Redirect("Confirmacion.aspx?pedido=" + pedID);
+            }
+            else
+            {
+                RegistrarPago(pedID, montoTotal, "Tarjeta", "Rechazado");
+                ActualizarEstadoPedido(pedID, "Error de pago");
+                // Mostrar mensaje de error
+            }
+        }
+
+        private void GuardarTarjeta()
+        {
+            string correo = Session["usuario"].ToString();
+            int usuID = ObtenerUsuarioID(correo);
+            if (usuID == 0) return;
+
+            string numeroTarjeta = txtCardNumber.Text.Replace(" ", "");
+            string ultimosCuatro = numeroTarjeta.Length > 4 ? numeroTarjeta.Substring(numeroTarjeta.Length - 4) : numeroTarjeta;
+
+            // Lógica simple para determinar el tipo de tarjeta
+            string tipoTarjeta = "card";
+            if (numeroTarjeta.StartsWith("4")) tipoTarjeta = "visa";
+            else if (numeroTarjeta.StartsWith("5")) tipoTarjeta = "mastercard";
+
+            string query = @"INSERT INTO Tarjetas (UsuID, TipoTarjeta, NombreTitular, UltimosCuatro, FechaExp)
+                             VALUES (@UsuID, @TipoTarjeta, @NombreTitular, @UltimosCuatro, @FechaExp)";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@UsuID", usuID);
+                    cmd.Parameters.AddWithValue("@TipoTarjeta", tipoTarjeta);
+                    cmd.Parameters.AddWithValue("@NombreTitular", txtCardName.Text);
+                    cmd.Parameters.AddWithValue("@UltimosCuatro", ultimosCuatro);
+                    cmd.Parameters.AddWithValue("@FechaExp", txtExpiryDate.Text);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void RegistrarPago(int pedID, decimal monto, string metodo, string estado = "Aprobado")
+        {
+            string query = @"INSERT INTO Pagos (PedID, Monto, MetodoPago, EstadoPago, TransaccionID)
+                             VALUES (@PedID, @Monto, @MetodoPago, @EstadoPago, @TransaccionID)";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@PedID", pedID);
+                    cmd.Parameters.AddWithValue("@Monto", monto);
+                    cmd.Parameters.AddWithValue("@MetodoPago", metodo);
+                    cmd.Parameters.AddWithValue("@EstadoPago", estado);
+                    cmd.Parameters.AddWithValue("@TransaccionID", Guid.NewGuid().ToString()); // ID de transacción simulado
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void ActualizarEstadoPedido(int pedID, string nuevoEstado)
+        {
+            string query = "UPDATE Pedidos SET EstPed = @Estado WHERE PedID = @PedID";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Estado", nuevoEstado);
+                    cmd.Parameters.AddWithValue("@PedID", pedID);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private int ObtenerUsuarioID(string correo)
+        {
+            string query = "SELECT UsuID FROM Usuarios WHERE CorUsu = @Correo";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Correo", correo);
+                    con.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
             }
         }
         private void CargarResumenPedido(int pedID)

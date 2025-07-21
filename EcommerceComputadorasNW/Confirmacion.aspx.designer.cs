@@ -11,7 +11,7 @@ namespace EcommerceComputadorasNW
 {
 
 
-    public partial class Pagos
+    public partial class Confirmacion
     {
 
         /// <summary>
@@ -24,129 +24,93 @@ namespace EcommerceComputadorasNW
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// Control rptTarjetasGuardadas.
+        /// Control ltlNumeroPedido.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTarjetasGuardadas;
+        protected global::System.Web.UI.WebControls.Literal ltlNumeroPedido;
 
         /// <summary>
-        /// Control newCardForm.
+        /// Control ltlFechaPedido.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl newCardForm;
+        protected global::System.Web.UI.WebControls.Literal ltlFechaPedido;
 
         /// <summary>
-        /// Control txtCardNumber.
+        /// Control ltlNombreCliente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCardNumber;
+        protected global::System.Web.UI.WebControls.Literal ltlNombreCliente;
 
         /// <summary>
-        /// Control txtCardName.
+        /// Control ltlDireccionEnvio.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCardName;
+        protected global::System.Web.UI.WebControls.Literal ltlDireccionEnvio;
 
         /// <summary>
-        /// Control txtExpiryDate.
+        /// Control rptProductosConfirmacion.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
+        protected global::System.Web.UI.WebControls.Repeater rptProductosConfirmacion;
 
         /// <summary>
-        /// Control txtCvv.
+        /// Control ltlSubtotal.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCvv;
+        protected global::System.Web.UI.WebControls.Literal ltlSubtotal;
 
         /// <summary>
-        /// Control chkSaveCard.
+        /// Control ltlEnvio.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chkSaveCard;
+        protected global::System.Web.UI.WebControls.Literal ltlEnvio;
 
         /// <summary>
-        /// Control ltlDireccionFacturacion.
+        /// Control ltlImpuestos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltlDireccionFacturacion;
+        protected global::System.Web.UI.WebControls.Literal ltlImpuestos;
 
         /// <summary>
-        /// Control btnProcesarPago.
+        /// Control ltlTotal.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnProcesarPago;
+        protected global::System.Web.UI.WebControls.Literal ltlTotal;
 
         /// <summary>
-        /// Control rptProductosPago.
+        /// Control btnImprimirFactura.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptProductosPago;
-
-        /// <summary>
-        /// Control lblSubtotalPago.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblSubtotalPago;
-
-        /// <summary>
-        /// Control lblEnvioPago.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblEnvioPago;
-
-        /// <summary>
-        /// Control lblImpuestosPago.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblImpuestosPago;
-
-        /// <summary>
-        /// Control lblTotalPago.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblTotalPago;
+        protected global::System.Web.UI.WebControls.Button btnImprimirFactura;
     }
 }
