@@ -355,19 +355,10 @@ function showSuccessModal() {
     document.body.style.overflow = "hidden"
 }
 
-// Navigation Functions
-function goToOrderConfirmation() {
-    window.location.href = "order-confirmation.html"
-}
+// Navigation Functi
 
 function continueShopping() {
-    window.location.href = "index.html"
-}
-
-function goBack() {
-    if (confirm("¿Estás seguro de que quieres volver? Se perderá la información de pago.")) {
-        window.location.href = "checkout.html"
-    }
+    window.location.href = "Default.aspx"
 }
 
 // Load Checkout Data

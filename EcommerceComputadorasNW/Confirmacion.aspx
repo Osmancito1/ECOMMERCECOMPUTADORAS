@@ -62,5 +62,15 @@
             </div>
         </div>
     </form>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        window.onload = () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        };
+    </script>
 </body>
 </html>

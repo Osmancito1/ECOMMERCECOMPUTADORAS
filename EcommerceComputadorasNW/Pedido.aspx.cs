@@ -175,7 +175,7 @@ namespace EcommerceComputadorasNW
         private DataTable ObtenerProductosCarrito(SqlConnection connection, int carID, SqlTransaction transaction = null)
         {
             string query = @"SELECT 
-                        p.ProID, p.NomPro, cd.CantPro, cd.PrecUni, 
+                        p.ProID, p.NomPro, p.ImaPro, cd.CantPro, cd.PrecUni, 
                         (cd.CantPro * cd.PrecUni) AS Subtotal
                      FROM CarritoDetalle cd
                      INNER JOIN Productos p ON cd.ProID = p.ProID

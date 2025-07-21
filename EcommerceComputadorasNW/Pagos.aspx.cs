@@ -224,9 +224,19 @@ namespace EcommerceComputadorasNW
         {
             string connectionString = ConfigurationManager.ConnectionStrings["conexionDB"].ConnectionString;
             DataTable dt = new DataTable();
-            string query = @"SELECT NomPro, CantPro, PreUniPro, (CantPro * PreUniPro) AS Subtotal 
-                     FROM PedidoDetalle 
-                     WHERE PedID = @PedID";
+            string query = @"SELECT 
+                                pd.NomPro, 
+                                pd.CantPro, 
+                                pd.PreUniPro, 
+                                (pd.CantPro * pd.PreUniPro) AS Subtotal,
+                                p.ImaPro
+                            FROM 
+                                dbo.PedidoDetalle pd
+                            INNER JOIN 
+                                dbo.Productos p ON pd.ProID = p.ProID
+                            WHERE 
+                                pd.PedID = @PedID;
+                            ";
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {

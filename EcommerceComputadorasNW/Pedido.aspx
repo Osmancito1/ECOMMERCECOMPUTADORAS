@@ -162,6 +162,7 @@
                                     <ItemTemplate>
                                         <div class="order-item">
                                             <div class="item-info">
+                                            <img src='<%# "img/" + Eval("ImaPro") %>' alt='<%# Eval("NomPro") %>' />
                                                 <h4><%# Eval("NomPro") %></h4>
                                                 <div class="item-details">
                                                     <span><%# Eval("CantPro") %> x <%# Eval("PrecUni", "{0:C}") %></span>
@@ -196,13 +197,13 @@
                                 </div>
                             </div>
 
-                            <div class="promo-code">
+                            <!--<div class="promo-code">
                                 <div class="promo-input">
                                     <asp:TextBox ID="txtPromoCode" runat="server" CssClass="promo-textbox" placeholder="Código de descuento"></asp:TextBox>
                                     <asp:Button ID="btnAplicarPromo" runat="server" CssClass="promo-button" Text="Aplicar" OnClick="btnAplicarPromo_Click" />
                                 </div>
                                 <asp:Label ID="lblMensajePromo" runat="server" CssClass="promo-message" Visible="false"></asp:Label>
-                            </div>
+                            </div>-->
 
                             <div class="security-badges">
                                 <div class="security-badge">

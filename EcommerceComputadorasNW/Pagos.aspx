@@ -262,8 +262,7 @@
                                     <asp:Repeater ID="rptProductosPago" runat="server">
                                         <ItemTemplate>
                                             <div class="order-item">
-                                                <%-- NOTA: La imagen es estática por ahora, puedes hacerla dinámica si la tienes en la BD --%>
-                                                <img src="/placeholder.svg?height=60&width=60" alt="<%# Eval("NomPro") %>">
+                                                <img src='<%# "img/" + Eval("ImaPro") %>' alt='<%# Eval("NomPro") %>' />
                                                 <div class="item-details">
                                                     <h4><%# Eval("NomPro") %></h4>
                                                     <p>Cantidad: <%# Eval("CantPro") %></p>
@@ -384,6 +383,13 @@
         toggleNewCardForm();
     });
 </script>
+       <script>
+           function goBack() {
+               if (confirm("¿Estás seguro de que quieres volver? Se perderá la información de pago.")) {
+                   window.location.href = "Pedido.aspx"
+               }
+           }
+       </script>
     </form>
 </body>
 </html>

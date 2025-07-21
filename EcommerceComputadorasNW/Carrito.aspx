@@ -180,14 +180,14 @@
                         <h3><i class="fas fa-receipt"></i> Resumen de la Orden</h3>
                         
                         <!-- Cupones -->
-                        <div class="coupon-section">
+                        <!--<div class="coupon-section">
                             <h4>Código de Descuento</h4>
                             <div class="coupon-input">
                                 <input type="text" id="couponCode" placeholder="Ingresa tu código">
                                 <button onclick="applyCoupon()">Aplicar</button>
                             </div>
                             <div id="couponMessage" class="coupon-message"></div>
-                        </div>
+                        </div>-->
 
                         <!-- Detalles Resumidos -->
                         <div class="summary-details">
