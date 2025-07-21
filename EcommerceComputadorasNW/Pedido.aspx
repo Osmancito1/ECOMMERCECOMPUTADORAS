@@ -5,10 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  rel="stylesheet" href=Content/pedidos.css>
     <title>Finalizar Pedido - TechStore</title>
-    <link rel="stylesheet" href="Content/pedidos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <form id="form1" runat="server">
@@ -162,7 +163,7 @@
                                     <ItemTemplate>
                                         <div class="order-item">
                                             <div class="item-info">
-                                            <img src='<%# "img/" + Eval("ImaPro") %>' alt='<%# Eval("NomPro") %>' />
+                                                <img src='<%# "img/" + Eval("ImaPro") %>' alt='<%# Eval("NomPro") %>' />
                                                 <h4><%# Eval("NomPro") %></h4>
                                                 <div class="item-details">
                                                     <span><%# Eval("CantPro") %> x <%# Eval("PrecUni", "{0:C}") %></span>
