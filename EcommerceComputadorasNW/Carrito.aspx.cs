@@ -120,86 +120,97 @@ namespace EcommerceComputadorasNW
             }
 
             DataTable carrito = (DataTable)Session["Carrito"];
+            bool pagoExitoso = false; // Bandera para controlar el estado del pago
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
+                SqlTransaction trans = con.BeginTransaction(); // Inicia la transacción aquí
 
-                using (SqlTransaction trans = con.BeginTransaction())
+                try
                 {
-                    try
+                    // Obtener ID del usuario a partir del correo
+                    int usuarioID = 0;
+                    using (SqlCommand cmdUsu = new SqlCommand("SELECT UsuID FROM Usuarios WHERE CorUsu = @correo", con, trans))
                     {
-                        // Obtener ID del usuario a partir del correo
-                        int usuarioID = 0;
-                        using (SqlCommand cmdUsu = new SqlCommand("SELECT UsuID FROM Usuarios WHERE CorUsu = @correo", con, trans))
+                        cmdUsu.Parameters.AddWithValue("@correo", correoUsuario);
+                        object result = cmdUsu.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
                         {
-                            cmdUsu.Parameters.AddWithValue("@correo", correoUsuario);
-                            object result = cmdUsu.ExecuteScalar();
-                            if (result != null)
-                                usuarioID = Convert.ToInt32(result);
+                            usuarioID = Convert.ToInt32(result);
                         }
-
-                        if (usuarioID == 0)
-                        {
-                            throw new Exception("Usuario no encontrado.");
-                        }
-
-                        // Insertar carrito
-                        int carritoID;
-                        using (SqlCommand cmd = new SqlCommand(@"
-                            INSERT INTO Carrito (UsuID, FechCre, EstCar)
-                            OUTPUT INSERTED.CarID
-                            VALUES (@UsuID, GETDATE(), 1)", con, trans))
-                        {
-                            cmd.Parameters.AddWithValue("@UsuID", usuarioID);
-                            carritoID = (int)cmd.ExecuteScalar();
-                        }
-
-                        // Insertar detalles
-                        foreach (DataRow row in carrito.Rows)
-                        {
-                            using (SqlCommand cmdDet = new SqlCommand(@"
-                                INSERT INTO CarritoDetalle (CarID, ProID, CantPro, PrecUni, FechAg)
-                                VALUES (@CarID, @ProID, @CantPro, @PrecUni, GETDATE())", con, trans))
-                            {
-                                cmdDet.Parameters.AddWithValue("@CarID", carritoID);
-                                cmdDet.Parameters.AddWithValue("@ProID", row["ProID"]);
-                                cmdDet.Parameters.AddWithValue("@CantPro", row["Cantidad"]);
-                                cmdDet.Parameters.AddWithValue("@PrecUni", row["Precio"]);
-                                cmdDet.ExecuteNonQuery();
-                            }
-                        }
-
-                        trans.Commit();
-
-                        Session["Carrito"] = null;
-
-                        rptCarrito.Visible = false;
-                        pnlCarritoVacio.Visible = true;
-                        pnlCartActions.Visible = false;
-                        pnlResumen.Visible = false;
-                        btnPagar.Visible = false;
-
-                        subtotal.InnerText = "$0.00";
-                        discount.InnerText = "-$0.00";
-                        shipping.InnerText = "$0.00";
-                        total.InnerText = "$0.00";
-
-                        var badgeControl = this.Master.FindControl("cartCountBadge") as System.Web.UI.HtmlControls.HtmlGenericControl;
-                        if (badgeControl != null)
-                        {
-                            string script = $"updateCartBadge(0, '{badgeControl.ClientID}');";
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "cartReset", script, true);
-                        }
-
-                        Response.Redirect("Pedido.aspx");
                     }
-                    catch (Exception ex)
+
+                    if (usuarioID == 0)
                     {
-                        trans.Rollback();
-                        Response.Write("Error al procesar el pago: " + ex.Message);
+                        throw new Exception("Usuario no encontrado.");
                     }
+
+                    // Insertar carrito
+                    int carritoID;
+                    using (SqlCommand cmd = new SqlCommand(@"
+                INSERT INTO Carrito (UsuID, FechCre, EstCar)
+                OUTPUT INSERTED.CarID
+                VALUES (@UsuID, GETDATE(), 1)", con, trans))
+                    {
+                        cmd.Parameters.AddWithValue("@UsuID", usuarioID);
+                        carritoID = (int)cmd.ExecuteScalar();
+                    }
+
+                    // Insertar detalles
+                    foreach (DataRow row in carrito.Rows)
+                    {
+                        using (SqlCommand cmdDet = new SqlCommand(@"
+                    INSERT INTO CarritoDetalle (CarID, ProID, CantPro, PrecUni, FechAg)
+                    VALUES (@CarID, @ProID, @CantPro, @PrecUni, GETDATE())", con, trans))
+                        {
+                            cmdDet.Parameters.AddWithValue("@CarID", carritoID);
+                            cmdDet.Parameters.AddWithValue("@ProID", row["ProID"]);
+                            cmdDet.Parameters.AddWithValue("@CantPro", row["Cantidad"]);
+                            cmdDet.Parameters.AddWithValue("@PrecUni", row["Precio"]);
+                            cmdDet.ExecuteNonQuery();
+                        }
+                    }
+
+                    trans.Commit(); // Confirma la transacción
+                    pagoExitoso = true; // Si todo fue bien, marca el pago como exitoso
                 }
+                catch (Exception ex)
+                {
+                    trans.Rollback(); // Si algo falla, revierte la transacción
+                    Response.Write("Error al procesar el pago: " + ex.Message);
+                    // La bandera pagoExitoso se mantiene en false
+                }
+            }
+
+            // --- Lógica de UI y redirección FUERA del bloque de la transacción ---
+            if (pagoExitoso)
+            {
+                // Limpiar el carrito y la UI
+                Session["Carrito"] = null;
+
+                rptCarrito.Visible = false;
+                pnlCarritoVacio.Visible = true;
+                pnlCartActions.Visible = false;
+                pnlResumen.Visible = false;
+                btnPagar.Visible = false;
+
+                subtotal.InnerText = "$0.00";
+                discount.InnerText = "-$0.00";
+                shipping.InnerText = "$0.00";
+                total.InnerText = "$0.00";
+
+                // Actualizar el contador del carrito en la MasterPage
+                var badgeControl = this.Master.FindControl("cartCountBadge") as System.Web.UI.HtmlControls.HtmlGenericControl;
+                if (badgeControl != null)
+                {
+                    string script = $"updateCartBadge(0, '{badgeControl.ClientID}');";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "cartReset", script, true);
+                }
+
+                // Redirigir SOLO si el pago fue exitoso
+                Response.Redirect("Pedido.aspx", false); // Usar false para evitar la ThreadAbortException
+                Context.ApplicationInstance.CompleteRequest(); // Asegura que la respuesta finalice correctamente
             }
         }
     }

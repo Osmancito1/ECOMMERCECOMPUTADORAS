@@ -266,76 +266,69 @@
 
                 <!-- Order Summary -->
                 <div class="order-summary-section">
-                    <div class="order-summary">
-                        <h3>Resumen del Pedido</h3>
-                        
-                        <div class="order-items">
-                            <div class="order-item">
-                                <img src="/placeholder.svg?height=60&width=60" alt="Producto">
-                                <div class="item-details">
-                                    <h4>Laptop Gaming ASUS ROG</h4>
-                                    <p>Cantidad: 1</p>
-                                    <span class="item-price">$1,299.99</span>
-                                </div>
-                            </div>
-
-                            <div class="order-item">
-                                <img src="/placeholder.svg?height=60&width=60" alt="Producto">
-                                <div class="item-details">
-                                    <h4>Monitor Gaming 27"</h4>
-                                    <p>Cantidad: 1</p>
-                                    <span class="item-price">$299.99</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-totals">
-                            <div class="total-line">
-                                <span>Subtotal:</span>
-                                <span>$1,599.98</span>
-                            </div>
-                            <div class="total-line">
-                                <span>Envío Express:</span>
-                                <span>$199.00</span>
-                            </div>
-                            <div class="total-line">
-                                <span>Impuestos:</span>
-                                <span>$143.99</span>
-                            </div>
-                            <div class="total-line discount">
-                                <span>Descuento (SAVE10):</span>
-                                <span>-$159.99</span>
-                            </div>
-                            <div class="total-line total">
-                                <span>Total a Pagar:</span>
-                                <span>$1,782.98</span>
-                            </div>
-                        </div>
-
-                        <div class="payment-security">
-                            <div class="security-badges">
-                                <div class="security-badge">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span>SSL Seguro</span>
-                                </div>
-                                <div class="security-badge">
-                                    <i class="fas fa-lock"></i>
-                                    <span>Encriptado 256-bit</span>
-                                </div>
-                            </div>
-                            
-                            <div class="accepted-cards">
-                                <h5>Tarjetas Aceptadas</h5>
-                                <div class="card-icons">
-                                    <i class="fab fa-cc-visa"></i>
-                                    <i class="fab fa-cc-mastercard"></i>
-                                    <i class="fab fa-cc-amex"></i>
-                                    <i class="fab fa-cc-discover"></i>
-                                </div>
-                            </div>
+    <div class="order-summary">
+        <h3>Resumen del Pedido</h3>
+        
+        <div class="order-items">
+            <asp:Repeater ID="rptProductosPago" runat="server">
+                <ItemTemplate>
+                    <div class="order-item">
+                        <%-- NOTA: La imagen es estática por ahora, puedes hacerla dinámica si la tienes en la BD --%>
+                        <img src="/placeholder.svg?height=60&width=60" alt="<%# Eval("NomPro") %>">
+                        <div class="item-details">
+                            <h4><%# Eval("NomPro") %></h4>
+                            <p>Cantidad: <%# Eval("CantPro") %></p>
+                            <span class="item-price"><%# Eval("PreUniPro", "{0:C}") %></span>
                         </div>
                     </div>
+                </ItemTemplate>
+            </asp:Repeater>
+        </div>
+
+        <div class="order-totals">
+            <div class="total-line">
+                <span>Subtotal:</span>
+                <span><asp:Literal ID="lblSubtotalPago" runat="server" /></span>
+            </div>
+            <div class="total-line">
+                <span>Envío:</span>
+                <span><asp:Literal ID="lblEnvioPago" runat="server" /></span>
+            </div>
+            <div class="total-line">
+                <span>Impuestos:</span>
+                <span><asp:Literal ID="lblImpuestosPago" runat="server" /></span>
+            </div>
+            <%-- Aquí puedes agregar lógica para descuentos si aplica --%>
+            <div class="total-line total">
+                <span>Total a Pagar:</span>
+                <span><asp:Literal ID="lblTotalPago" runat="server" /></span>
+            </div>
+        </div>
+
+        <div class="payment-security">
+            <div class="security-badges">
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SSL Seguro</span>
                 </div>
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Encriptado 256-bit</span>
+                </div>
+            </div>
+            
+            <div class="accepted-cards">
+                <h5>Tarjetas Aceptadas</h5>
+                <div class="card-icons">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-discover"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </main>
