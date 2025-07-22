@@ -91,6 +91,7 @@
                             <li><a href="#">Devoluciones</a></li>
                             <li><a href="#">Garantías</a></li>
                             <li><a href="#">Contacto</a></li>
+                            <li><a href="MapaSitio.aspx">Mapa del sitio</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
